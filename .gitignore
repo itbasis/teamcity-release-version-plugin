@@ -1,0 +1,14 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# 2017.1.2
+.teamcity/
+test-in-teamcity.bash
+
+.idea/
+!.idea/gradle.xml
+!.idea/compiler.xml
+!.idea/vcs.xml
+!.idea/runConfigurations/
+
+build/
+.gradle/
