@@ -11,8 +11,6 @@
 
     <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionBuildPropertiesProvider"/>
 
-    <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionBuildPropertiesProvider"/>
-
     <!--suppress SpringBeanConstructorArgInspection -->
     <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionServerListener"/>
 

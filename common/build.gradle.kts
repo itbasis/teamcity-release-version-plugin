@@ -1,6 +1,5 @@
 import com.github.rodm.teamcity.TeamCityPluginExtension
 import org.gradle.kotlin.dsl.extra
-import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
