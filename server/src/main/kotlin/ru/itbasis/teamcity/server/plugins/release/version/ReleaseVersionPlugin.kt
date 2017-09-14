@@ -4,7 +4,6 @@ import jetbrains.buildServer.log.Loggers
 import jetbrains.buildServer.serverSide.SBuildServer
 import jetbrains.buildServer.serverSide.ServerExtensionHolder
 import mu.NamedKLogging
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import ru.itbasis.teamcity.plugin.release.version.common.CommonBuildFeature
 

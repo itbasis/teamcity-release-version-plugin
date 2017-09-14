@@ -1,5 +1,7 @@
 import com.github.rodm.teamcity.TeamCityPluginExtension
+import org.gradle.kotlin.dsl.extra
 import org.gradle.plugins.ide.idea.model.IdeaModel
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
 	val kotlinVersion = property("kotlinVersion") as String
@@ -18,10 +20,12 @@ buildscript {
 	}
 }
 
+val javaVersion: String by extra
+
 plugins {
 	base
 	`java-base`
-	kotlin("jvm")
+	kotlin("jvm", "1.1.4-3")
 }
 
 apply {
@@ -29,6 +33,9 @@ apply {
 	plugin("com.github.rodm.teamcity-common")
 }
 
+tasks.withType<KotlinCompile> {
+	kotlinOptions.jvmTarget = javaVersion
+}
 
 dependencies {
 	val kotlinVersion = extra["kotlin.version"] as String

@@ -1,5 +1,6 @@
 import com.github.rodm.teamcity.*
 import org.gradle.plugins.ide.idea.model.IdeaModel
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
 	val kotlinVersion = rootProject.property("kotlinVersion") as String
@@ -17,7 +18,7 @@ buildscript {
 	}
 }
 
-val kotlinVersion = rootProject.property("kotlinVersion") as String
+val javaVersion: String by extra
 val teamcityVersion = rootProject.property("teamcityVersion") as String
 
 repositories {
@@ -28,7 +29,7 @@ repositories {
 plugins {
 	base
 	`java-base`
-	kotlin("jvm")
+	kotlin("jvm", "1.1.4-3")
 }
 
 apply {
@@ -39,6 +40,12 @@ apply {
 
 dependencies {
 	compile(project(":common"))
+
+	compile(group = "com.github.hotchemi", name = "khronos", version = "0.9.0")
+}
+
+tasks.withType<KotlinCompile> {
+	kotlinOptions.jvmTarget = javaVersion
 }
 
 configure<TeamCityPluginExtension> {
@@ -53,6 +60,7 @@ configure<TeamCityPluginExtension> {
 			email = property("developerEmail") as String
 			description = rootProject.description
 			useSeparateClassloader = true
+			downloadUrl = "https://github.com/itbasis/teamcity-release-version-plugin"
 		})
 	})
 }

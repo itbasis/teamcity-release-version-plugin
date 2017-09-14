@@ -12,3 +12,4 @@ test-in-teamcity.bash
 
 build/
 .gradle/
+.sandbox/

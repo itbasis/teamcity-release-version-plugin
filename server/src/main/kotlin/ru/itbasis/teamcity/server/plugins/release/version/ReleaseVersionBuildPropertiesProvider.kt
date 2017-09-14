@@ -3,9 +3,12 @@ package ru.itbasis.teamcity.server.plugins.release.version
 import jetbrains.buildServer.log.Loggers
 import jetbrains.buildServer.serverSide.SBuild
 import jetbrains.buildServer.serverSide.parameters.AbstractBuildParametersProvider
+import khronos.toString
 import mu.NamedKLogging
 import ru.itbasis.teamcity.plugin.release.version.common.CommonBuildFeature
+import ru.itbasis.teamcity.plugin.release.version.common.DateFormatTemplates
 import ru.itbasis.teamcity.plugin.release.version.common.ReleaseVersionBuildParameters
+import java.util.*
 
 open class ReleaseVersionBuildPropertiesProvider : AbstractBuildParametersProvider() {
 	companion object : NamedKLogging(Loggers.SERVER_CATEGORY)
@@ -17,8 +20,9 @@ open class ReleaseVersionBuildPropertiesProvider : AbstractBuildParametersProvid
 			return buildParameters.getParams()
 		}
 
-		logger.info("getParameters.build: {}", this.javaClass.name)
-		buildParameters.addEnvironmentAndSystem(CommonBuildFeature.VARIABLE_NAME, "test")
+		ReleaseVersionServerListener.logger.trace { "build: ${build.fullName}" }
+		buildParameters.addEnvironmentAndSystem(CommonBuildFeature.VARIABLE_RELEASE_NAME,
+		                                        Calendar.getInstance().time.toString(DateFormatTemplates.ONE_DOT))
 		return buildParameters.getParams()
 	}
 }
