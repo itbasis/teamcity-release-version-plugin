@@ -1,35 +1,28 @@
 import com.github.rodm.teamcity.*
-import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-	val kotlinVersion = rootProject.property("kotlinVersion") as String
-
 	repositories {
 		jcenter()
-		maven { url = uri("https://plugins.gradle.org/m2/") }
+		maven("https://plugins.gradle.org/m2/")
 	}
 	dependencies {
-		classpath(kotlin("gradle-plugin", kotlinVersion))
-		classpath(kotlin("noarg", kotlinVersion))
-		classpath(kotlin("allopen", kotlinVersion))
+		classpath(kotlin("gradle-plugin"))
+		classpath(kotlin("noarg"))
+		classpath(kotlin("allopen"))
 
 		classpath("com.github.rodm:gradle-teamcity-plugin:0.11")
 	}
 }
 
 val javaVersion: String by extra
-val teamcityVersion = rootProject.property("teamcityVersion") as String
-
-repositories {
-	jcenter()
-	maven { url = uri("http://download.jetbrains.com/teamcity-repository") }
-}
+val teamcityVersion: String by extra
+val vcsUrl: String by extra
 
 plugins {
 	base
 	`java-base`
-	kotlin("jvm", "1.1.4-3")
+	kotlin("jvm")
 }
 
 apply {
@@ -60,11 +53,7 @@ configure<TeamCityPluginExtension> {
 			email = property("developerEmail") as String
 			description = rootProject.description
 			useSeparateClassloader = true
-			downloadUrl = "https://github.com/itbasis/teamcity-release-version-plugin"
+			downloadUrl = vcsUrl
 		})
 	})
-}
-
-fun Project.teamcity(configuration: TeamCityPluginExtension.() -> Unit) {
-	configure(configuration)
 }

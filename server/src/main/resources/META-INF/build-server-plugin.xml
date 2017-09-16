@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 >
 
-    <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionServerBuildFeature"/>
+    <bean id="dateTimeVersionBuildFeature"
+          class="ru.itbasis.teamcity.server.plugins.release.version.datetime.DateTimeVersionBuildFeature"/>
+
+    <util:list id="buildFeatures" value-type="ru.itbasis.teamcity.server.plugins.release.version.AbstractBuildFeature">
+        <ref bean="dateTimeVersionBuildFeature"/>
+    </util:list>
 
     <!--suppress SpringBeanConstructorArgInspection -->
     <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionPlugin"/>
 
-    <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionBuildPropertiesProvider"/>
-
-    <!--suppress SpringBeanConstructorArgInspection -->
-    <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionServerListener"/>
+    <bean class="ru.itbasis.teamcity.server.plugins.release.version.ReleaseVersionBuildPropertiesProvider">
+        <constructor-arg name="buildFeatures" ref="buildFeatures"/>
+    </bean>
 
 </beans>

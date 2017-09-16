@@ -3,28 +3,27 @@ import org.gradle.kotlin.dsl.extra
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
-	val kotlinVersion = property("kotlinVersion") as String
-
 	repositories {
 		jcenter()
-		maven { url = uri("https://plugins.gradle.org/m2/") }
+		maven("https://plugins.gradle.org/m2/")
 	}
 
 	dependencies {
-		classpath(kotlin("gradle-plugin", kotlinVersion))
-		classpath(kotlin("noarg", kotlinVersion))
-		classpath(kotlin("allopen", kotlinVersion))
+		classpath(kotlin("gradle-plugin"))
+		classpath(kotlin("noarg"))
+		classpath(kotlin("allopen"))
 
 		classpath("com.github.rodm:gradle-teamcity-plugin:1.0")
 	}
 }
 
 val javaVersion: String by extra
+val teamcityVersion: String by extra
 
 plugins {
 	base
 	`java-base`
-	kotlin("jvm", "1.1.4-3")
+	kotlin("jvm")
 }
 
 apply {
@@ -37,10 +36,8 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-	val kotlinVersion = extra["kotlin.version"] as String
-
-	compile(kotlin("runtime", kotlinVersion))
-	compile(kotlin("stdlib-jre8", kotlinVersion))
+	compile(kotlin("runtime"))
+	compile(kotlin("stdlib-jre8"))
 
 	compile(group = "io.github.microutils", name = "kotlin-logging", version = "latest.release")
 	compile(group = "org.slf4j", name = "slf4j-log4j12", version = "1.7.25") { isTransitive = false }
@@ -48,5 +45,5 @@ dependencies {
 }
 
 configure<TeamCityPluginExtension> {
-	version = extra["teamcity.version"] as String
+	version = teamcityVersion
 }

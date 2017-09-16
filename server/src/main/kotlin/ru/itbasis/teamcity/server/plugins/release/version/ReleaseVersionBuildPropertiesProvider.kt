@@ -3,26 +3,27 @@ package ru.itbasis.teamcity.server.plugins.release.version
 import jetbrains.buildServer.log.Loggers
 import jetbrains.buildServer.serverSide.SBuild
 import jetbrains.buildServer.serverSide.parameters.AbstractBuildParametersProvider
-import khronos.toString
 import mu.NamedKLogging
-import ru.itbasis.teamcity.plugin.release.version.common.CommonBuildFeature
-import ru.itbasis.teamcity.plugin.release.version.common.DateFormatTemplates
-import ru.itbasis.teamcity.plugin.release.version.common.ReleaseVersionBuildParameters
-import java.util.*
+import org.springframework.beans.factory.annotation.Autowired
 
-open class ReleaseVersionBuildPropertiesProvider : AbstractBuildParametersProvider() {
+open class ReleaseVersionBuildPropertiesProvider @Autowired constructor(
+	private val buildFeatures: List<AbstractBuildFeature>
+                                                                       ) : AbstractBuildParametersProvider() {
+
 	companion object : NamedKLogging(Loggers.SERVER_CATEGORY)
 
 	override fun getParameters(build: SBuild, emulationMode: Boolean): MutableMap<String, String> {
-		val buildParameters = ReleaseVersionBuildParameters()
+		for (buildFeature in buildFeatures) {
+			logger.debug { "build params from buildFeature: ${buildFeature.javaClass}" }
 
-		if (build.getBuildFeaturesOfType(CommonBuildFeature.FEATURE_NAME).isEmpty()) {
-			return buildParameters.getParams()
+			val buildFeaturesOfType = build.getBuildFeaturesOfType(buildFeature.type)
+			logger.debug { "found count: ${buildFeaturesOfType.size}" }
+			if (buildFeaturesOfType.isNotEmpty()) {
+				return buildFeature.buildParameters(build)
+			}
 		}
 
-		ReleaseVersionServerListener.logger.trace { "build: ${build.fullName}" }
-		buildParameters.addEnvironmentAndSystem(CommonBuildFeature.VARIABLE_RELEASE_NAME,
-		                                        Calendar.getInstance().time.toString(DateFormatTemplates.ONE_DOT))
-		return buildParameters.getParams()
+		return hashMapOf()
 	}
+
 }
